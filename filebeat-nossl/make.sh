@@ -3,11 +3,12 @@
 # this script is used to build filebeat container.
 
 REGISTRY=docker-server.com
+PROJECT=test
 IMAGE=filebeat-nossl
-TAG=1.0.0
+TAG=5.5
 
 # ========================= build docker images =======================
-docker build -t ${IMAGE}:${TAG} -t ${REGISTRY}/${IMAGE}:${TAG} .
+docker build -t ${IMAGE}:${TAG} -t ${REGISTRY}/${PROJECT}/${IMAGE}:${TAG} .
 # ========================= push images ===============================
 docker login -u admin -p Harbor12345 docker-server.com
-docker push ${REGISTRY}/${IMAGE}:${TAG}
+docker push ${REGISTRY}/${PROJECT}/${IMAGE}:${TAG}
