@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: filebeat
-        image: jwplayer/k8s-filebeat:latest
+        image: registry.cn-hangzhou.aliyuncs.com/shalousun/filebeat-nossl:5.5
         imagePullPolicy: Always
         resources:
           limits:
