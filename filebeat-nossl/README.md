@@ -21,3 +21,32 @@ filebeat启动后，所有容器的日志都会被发送到logstash中。
 ```
 kubectl create -f ds-filebeat.yml
 ```
+# Logstash配置
+
+logstash端日志接收配置
+
+```
+input {
+ beats {
+   port => 5044
+  }
+}
+
+filter {
+  if [fields][program] == "filebeat_k8s" {
+    mutate {
+      rename => { "log" => "message" }
+    }
+    grok {
+      match => { "source" => "/var/log/containers/%{DATA:k8s_pod}_%{DATA:k8s_namespace}_%{GREEDYDATA:k8s_service}-%{DATA:k8s_container_id}.log" }
+      remove_field => ["source"]
+    }
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["127.0.0.1:9200"]
+    index => "kube-%{+YYYY.MM.dd}"
+  }
+}
+```
